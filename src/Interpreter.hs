@@ -52,7 +52,7 @@ delayAmount = 100000
 
 -- | Retrieves instruction at given position
 instructionAt :: Program -> Position -> Instruction
-instructionAt p (x,y) | y >= h || x >= w = Stop
+instructionAt p (x,y) | y < 0 || x < 0 || y >= h || x >= w = Stop
                       | otherwise = (p !! y) !! x
     where h = length p;
           w = length $ p !! y
