@@ -14,7 +14,12 @@ import Utility
 
 -- | Parse given newline-separated string and create program instance
 parseProgram :: String -> Program
-parseProgram s = map parseLine $ lines s
+parseProgram s = map parseLine . filter (not. isComment) . filter (not . null) . lines $ s
+
+-- | Check if a particular line is commented-out
+isComment :: String -> Bool
+isComment ('#':_) = True
+isComment _ = False
 
 -- | Parse a whole line of characters and convert them to a list of instructions
 parseLine :: String -> [Instruction]
