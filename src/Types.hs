@@ -32,8 +32,8 @@ data Instruction = IncReg         -- ^ Increment register at current index
                  | DecReg         -- ^ Decrement register at current index
                  | PrntRegChr     -- ^ Print contents of register at current index, interpreted as a character
                  | PrntReg        -- ^ Print contents of register at current index, interpreted as an integer
-                 | IncIdx         -- ^ Increment register index
-                 | DecIdx         -- ^ Decrement register index
+                 | IncIdx         -- ^ Increment register index. Note that the value is clamped to the register count.
+                 | DecIdx         -- ^ Decrement register index. Note that the value is clamped to the register count.
                  | CondTurnLeft   -- ^ Turn left if register at current index is 0
                  | TurnLeft       -- ^ Unconditionally turn left
                  | CondTurnRight  -- ^ Turn right if register at current index is 0

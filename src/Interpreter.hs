@@ -64,6 +64,10 @@ updateRegister mod s@State{..} = s{registers = regs'}
     where regs'  = replaceElement registers regIndex newval;
           newval = (+) mod $ registers !! regIndex
           
+updateIndex :: Int -> State -> State
+updateIndex mod s@State{..} = s{regIndex = newIdx}
+    where newIdx = clamp 0 (registerCount-1) $ regIndex + mod
+          
 -- | Determines new interpretation direction based on turn direction 
 turn :: Direction -> Turn -> Direction
 turn DUp TLeft     = DLeft
@@ -107,8 +111,8 @@ interpretInstr s Delay                   = threadDelay delayAmount >> return s
 interpretInstr _ Stop                    = putStrLn "End of program reached" >> exitSuccess
 interpretInstr s IncReg                  = return $ updateRegister (1) s
 interpretInstr s DecReg                  = return $ updateRegister (-1) s
-interpretInstr s@State{..} IncIdx        = return $ s{regIndex = regIndex + 1}
-interpretInstr s@State{..} DecIdx        = return $ s{regIndex = regIndex - 1}
+interpretInstr s@State{..} IncIdx        = return $ updateIndex (1) s
+interpretInstr s@State{..} DecIdx        = return $ updateIndex (-1) s
 interpretInstr s@State{..} PrntRegChr    = putStrLn [chr $ registers !! regIndex] >> return s
 interpretInstr s@State{..} PrntReg       = (putStrLn $ show $ registers !! regIndex) >> return s    
 interpretInstr s@State{..} TurnLeft      = return $ s{direction = turn direction TLeft}
